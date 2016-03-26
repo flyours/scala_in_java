@@ -1,4 +1,4 @@
-package chap11.scala
+package com.jeff.scala
 
 trait Persistable[T] {
   def log(m: String) = {

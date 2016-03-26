@@ -1,4 +1,4 @@
-package chap11.scala
+package com.jeff.scala
 import java.io._
 
 trait Logger {
