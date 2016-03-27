@@ -1,5 +1,7 @@
 package com.jeff.scala
 
+import org.slf4j.LoggerFactory
+
 trait Persistable[T] {
   def log(m: String) = {
     new DualLogger().log(m)
@@ -29,7 +31,9 @@ class PersistableImpl extends Persistable[PersistableImpl] {
 }
 
 object Main {
+  val logger = LoggerFactory.getLogger(Main.getClass)
   def main(args: Array[String]): Unit = {
     new PersistableImpl().save()
+    logger.debug("save done")
   }
 }

@@ -1,12 +1,16 @@
 package com.jeff.scala
 import java.io._
 
+import org.slf4j.LoggerFactory
+
 trait Logger {
   def log(m: String)
 }
 
 trait ConsoleLogger extends Logger {
-  def log(m: String) = println(m)
+  val logger = LoggerFactory.getLogger("ConsoleLogger")
+
+  def log(m: String) = logger.debug(m)
 }
 
 trait DecorateLogger extends Logger {
