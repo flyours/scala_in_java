@@ -1,6 +1,7 @@
 package com.jeff.java;
 
-import com.jeff.scala.*;
+import com.jeff.scala.Persistable;
+import com.jeff.scala.Persistable$class;
 
 public class Account implements Persistable<Account> {
     @Override
