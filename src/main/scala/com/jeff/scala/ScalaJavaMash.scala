@@ -25,9 +25,7 @@ trait RemoteLogger extends java.rmi.Remote {
 }
 
 class PersistableImpl extends Persistable[PersistableImpl] {
-  override def getEntity = {
-    this
-  }
+  override def getEntity = this
 }
 
 object Main {
