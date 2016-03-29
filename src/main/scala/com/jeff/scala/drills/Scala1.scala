@@ -31,6 +31,8 @@ object Scala1 {
         modifierAndScope()
         valueClass()
         traitStack()
+        implicitFunction()
+        implicitClass()
     }
 
     def paramDefine(): Unit = {
@@ -55,7 +57,7 @@ object Scala1 {
     def dynamicTest(): Unit = {
         //miss method feature
         class MyMap extends Dynamic {
-            private val map = Map("foo" -> "1a", "bar" -> 2)
+            private val map = Map("foo" -> "1a", "bar" -> "2")
 
             def selectDynamic(field: String) = {
                 map.get(field)
@@ -63,9 +65,8 @@ object Scala1 {
 
         }
         val someMap = new MyMap
-        //    logger.debug("value={}", someMap.foo.get)
-        //    logger.debug("value={}", someMap.bar.get)
-
+        logger.debug("value={}", someMap.foo.get)
+        logger.debug("value={}", someMap.bar.get)
     }
 
     def lazyTest(): Unit = {
@@ -346,6 +347,30 @@ object Scala1 {
 
         val test2 = new MyTestImpl("jeff") with MyTest2
         logger.debug(test2.one)
+    }
+
+    def implicitFunction(): Unit = {
+        //below not defined
+        //val oneTo10 = 1 --> 10
+        class RangeMaker(left: Int) {
+            def -->(right: Int) = left to right
+        }
+
+        implicit def int2RangeMaker(left: Int): RangeMaker = new RangeMaker(left)
+        val oneTo10 = 1 --> 10
+
+        logger.debug(oneTo10.toString)
+
+    }
+
+    def implicitClass(): Unit = {
+        implicit class RangeMaker(val left: Int) {
+            def -->(right: Int): Range = left to right
+        }
+        val oneTo10 = 1 --> 10
+
+        logger.debug(oneTo10.toString)
+
     }
 
 }
