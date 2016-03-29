@@ -39,7 +39,7 @@ object Scala1 {
         /**
           *
           * @param cond , this define will evaluate the value every time, otherwise , only first time.
-          * @param body
+          * @param body , this define is one closure, only support {} or ({})
           */
         def loopTill(cond: => Boolean)(body: => Unit): Unit = {
             if (cond) {
@@ -112,23 +112,13 @@ object Scala1 {
         }
         def break = throw breakException
 
-        //closure should use {}
+        //closure should use {} or ({})
         breakable {
             val env = System.getenv("ABC")
             if (env == null) break
             println("found abc")
         }
 
-        def listFile: Unit = {
-            val files = new File(".").listFiles
-            for {
-                file <- files
-                fileName = file.getName
-                if (fileName.endsWith(".md"))
-            } println(fileName)
-        }
-
-        listFile
     }
 
     def infixOperator(): Unit = {
@@ -299,6 +289,17 @@ object Scala1 {
         val forVal = for (i <- 1 to 100) yield i
 
         logger.debug("for comprehension forVal type={}, size={}", forVal.getClass, forVal.size)
+
+        def listFile: Unit = {
+            val files = new File(".").listFiles
+            for {
+                file <- files
+                fileName = file.getName
+                if (fileName.endsWith(".md"))
+            } logger.debug(fileName)
+        }
+
+        listFile
     }
 
 
@@ -365,7 +366,7 @@ object Scala1 {
 
     def implicitClass(): Unit = {
         implicit class RangeMaker(val left: Int) {
-            def -->(right: Int): Range = left to right
+            def -->(right: Int) = left to right
         }
         val oneTo10 = 1 --> 10
 
@@ -377,7 +378,10 @@ object Scala1 {
 
 
 trait Printable extends Any {
-    def p() = println(this)
+    def p() = {
+        val logger = LoggerFactory.getLogger("Printable")
+        logger.debug("this:{}", this)
+    }
 }
 
 /**
