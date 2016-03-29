@@ -357,6 +357,8 @@ trait Printable extends Any {
 }
 
 /**
+  * can not be defined locally!!!
+  *
   *  The class must have exactly one val parameter (vars are not allowed).
   *  The parameter type may not be a value class.
   *  The class can not have any auxiliary constructors.
