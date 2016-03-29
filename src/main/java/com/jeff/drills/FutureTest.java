@@ -20,6 +20,7 @@ public class FutureTest implements Callable<String> {
         ExecutorService executor = Executors.newFixedThreadPool(10);
         //create a list to hold the Future object associated with Callable
         List<Future<String>> list = new ArrayList<>();
+
         //Create MyCallable instance
         Callable<String> callable = new FutureTest();
         for(int i=0; i< 100; i++){
