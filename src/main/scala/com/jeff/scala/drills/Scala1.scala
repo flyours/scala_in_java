@@ -376,7 +376,6 @@ object Scala1 {
 
 }
 
-
 trait Printable extends Any {
     def p() = {
         val logger = LoggerFactory.getLogger("Printable")
