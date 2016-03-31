@@ -33,12 +33,14 @@ object Scala1 {
         traitStack()
         implicitFunction()
         implicitClass()
+        covariantAndContravariant()
+        higherOrderFunction()
     }
 
     def paramDefine(): Unit = {
         /**
           *
-          * @param cond , this define will evaluate the value every time, otherwise , only first time.
+          * @param cond , this define will evaluate the value every time(Call By Name), otherwise , only first time.
           * @param body , this define is one closure, only support {} or ({})
           */
         def loopTill(cond: => Boolean)(body: => Unit): Unit = {
@@ -286,7 +288,7 @@ object Scala1 {
     }
 
     def forComprehension(): Unit = {
-        val forVal = for (i <- 1 to 100) yield i
+        val forVal = for (i <- 1 to 10) yield i
 
         logger.debug("for comprehension forVal type={}, size={}", forVal.getClass, forVal.size)
 
@@ -372,6 +374,71 @@ object Scala1 {
 
         logger.debug(oneTo10.toString)
 
+    }
+
+    def covariantAndContravariant(): Unit = {
+        //mutable has to be invariant
+
+        def position[A](xs: List[A], value: A): Option[Int] = {
+            val index = xs.indexOf(value)
+            if (index != -1) Some(index) else None
+        }
+
+        logger.debug("position:{}", position(List(1, 2, 4, 6), 4))
+        logger.debug("position:{}", position(List(1, 2, 4, 6), 5))
+
+
+        sealed trait Maybe[+A] {
+            def isEmpty: Boolean
+
+            //contravariant can not used as return
+            def get: A
+
+            //covariant can not used as parma
+            //has to add type bound
+            def getOrElse[B >: A](default: B): B = {
+                if (isEmpty) default else get
+            }
+        }
+
+        final case class Just[A](value: A) extends Maybe[A] {
+            override def isEmpty: Boolean = false
+
+            override def get: A = value
+        }
+
+        case object Nill extends Maybe[Nothing] {
+            override def isEmpty: Boolean = true
+
+            override def get: Nothing = throw new NoSuchElementException("Nill.get")
+        }
+
+        def position2[A](xs: List[A], value: A): Maybe[Int] = {
+            val index = xs.indexOf(value)
+            //Maybe[int] can be assigned to Maybe[Nothing] as Maybe is covariant.
+            if (index != -1) Just(index) else Nill
+        }
+
+        logger.debug("position2:{}", position2(List(1, 2, 4, 6), 4))
+        logger.debug("position2:{}", position2(List(1, 2, 4, 6), 5))
+
+    }
+
+    def higherOrderFunction(): Unit = {
+        val forVal = for {i <- 1 to 10} yield i
+        //using anonymous function
+        logger.debug(forVal.map { x => x + 1 }.toString())
+        //using function literal
+        logger.debug(forVal.map {
+            _ + 100
+        }.toString())
+
+        def addTen(num: Int) = {
+            def ++(x: Int) = x + 10
+            ++(num)
+        }
+        //using call by name
+        logger.debug(forVal.map(addTen).toString())
     }
 
 }
