@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory
 import scala.io.Source
 import scala.language.dynamics
 
-object Scala1 {
-    val logger = LoggerFactory.getLogger(Scala1.getClass)
+object ScalaDrills {
+    val logger = LoggerFactory.getLogger(ScalaDrills.getClass)
 
     def main(args: Array[String]): Unit = {
 
