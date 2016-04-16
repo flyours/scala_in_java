@@ -394,7 +394,7 @@ object ScalaDrills {
             //contravariant can not used as return
             def get: A
 
-            //covariant can not used as parma
+            //covariant can not used as parameter
             //has to add type bound
             def getOrElse[B >: A](default: B): B = {
                 if (isEmpty) default else get
