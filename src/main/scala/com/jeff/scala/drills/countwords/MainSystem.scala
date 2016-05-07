@@ -19,16 +19,17 @@ case class WordCount(url: String, count: Int)
 case class StartCounting(urls: Seq[String], numActors: Int)
 
 object MainSystem {
+    //this is sync log
     val logger = LoggerFactory.getLogger(MainSystem.getClass)
 
-    class MainActor(accumulator: ActorRef) extends Actor {
+    class MainActor(accumulator: ActorRef) extends Actor with ActorLogging {
         def receive = {
             case "start" =>
                 val urls = List("http://www.infoq.com/",
                     "http://www.qq.com/",
                     "http://www.sohu.com/")
                 accumulator ! StartCounting(urls, 2)
-                logger.debug("MainActor send urls done.", new Throwable("MainActor"))
+                log.debug("MainActor send urls done.", new Throwable("MainActor"))
 
         }
     }

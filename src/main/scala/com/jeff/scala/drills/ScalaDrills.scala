@@ -5,8 +5,10 @@ import java.util.Date
 
 import org.slf4j.LoggerFactory
 
-import scala.io.Source
+import scala.annotation.tailrec
+import scala.io.{Source, StdIn}
 import scala.language.dynamics
+import scala.util.{Failure, Success, Try}
 
 object ScalaDrills {
     val logger = LoggerFactory.getLogger(ScalaDrills.getClass)
@@ -35,6 +37,12 @@ object ScalaDrills {
         implicitClass()
         covariantAndContravariant()
         higherOrderFunction()
+
+
+        //if define don't have (),then the invoke can't have ();
+        // if define have (),then invoke may or not have (); better have means having side effect
+        //
+        scalaTry
     }
 
     def paramDefine(): Unit = {
@@ -440,6 +448,23 @@ object ScalaDrills {
         //using call by name
         logger.debug(forVal.map(addTen).toString())
     }
+
+    @tailrec
+    def scalaTry: Try[Int] = {
+        val dividend = Try(StdIn.readLine("Enter an Int that you'd like to divide:\n").toInt)
+        val divisor = Try(StdIn.readLine("Enter an Int that you'd like to divide by:\n").toInt)
+        val problem = dividend.flatMap(x => divisor.map(y => x / y))
+        problem match {
+            case Success(v) =>
+                logger.debug("Result of " + dividend.get + "/" + divisor.get + " is: " + v)
+                Success(v)
+            case Failure(e) =>
+                logger.debug("You must've divided by zero or entered something that's not an Int. Try again!")
+                logger.debug("Info from the exception: " + e.getMessage)
+                scalaTry
+        }
+    }
+
 
 }
 
