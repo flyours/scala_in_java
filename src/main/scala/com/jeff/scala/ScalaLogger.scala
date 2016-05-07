@@ -31,6 +31,7 @@ trait WireTapLogger extends Logger {
     }
 }
 
+//stack traits
 class DualLogger extends ConsoleLogger with DecorateLogger with WireTapLogger {
     def otherSource: OutputStream = new FileOutputStream(File.createTempFile("crazy-logger", "txt"))
 }

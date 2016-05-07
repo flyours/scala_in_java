@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 
 class WordCountMaster extends Actor {
 
-    val logger = LoggerFactory.getLogger("WordCountMaster")
+    val logger = LoggerFactory.getLogger(this.getClass)
 
     private[this] var urlCount: Int = _
     private[this] var sortedCount: Seq[(String, Int)] = Nil
@@ -18,13 +18,14 @@ class WordCountMaster extends Actor {
             val workers = createWorkers(numActors)
             urlCount = urls.size
             beginSorting(urls, workers)
+            logger.debug("WordCountMaster send to worker done", new Throwable("StartCounting"))
 
         case WordCount(url, count) =>
             logger.debug(s" ${url} -> ${count}")
             sortedCount = sortedCount :+(url, count)
             sortedCount = sortedCount.sortWith(_._2 < _._2)
             if (sortedCount.size == urlCount) {
-                logger.debug("final result " + sortedCount)
+                logger.debug("final result:" + sortedCount, new Throwable("WordCount"))
                 finishSorting()
             }
     }
