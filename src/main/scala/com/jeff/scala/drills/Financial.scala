@@ -2,9 +2,10 @@ package com.jeff.scala.drills
 
 object Financial {
     def main(args: Array[String]) {
-        val results = for (line <- args; oneNum = Integer.parseInt(line)) yield oneNum
+        val results = for (line <- args; oneNum = java.lang.Float.parseFloat(line)) yield oneNum
         val sum = results.sum
         println(args.mkString("+"))
-        println("=" + sum)
+        println("total Number: "+results.length)
+        println("         sum: " + sum)
     }
 }

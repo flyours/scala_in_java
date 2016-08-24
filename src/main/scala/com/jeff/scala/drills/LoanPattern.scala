@@ -27,8 +27,25 @@ object LoanPattern {
         }
         //using eta expansion
         val func = new UseResource().use[Unit, MyResource] _
+
+        //use anonymous function for second param
         func(MyResource("resource")) {
             r => logger.debug("in processing {}", r)
         }
+
+        logger.debug("="*60)
+        //above equals to below, which is function literal
+        func(MyResource("resource")) {
+            logger.debug("in processing {}", _)
+        }
+
+        logger.debug("="*60)
+        //() is same with {}
+        func(MyResource("resource")) (
+            r => logger.debug("in processing {}", r)
+        )
+
+        val mylist=List((2,4),("6","test"))
+        logger.debug("last value="+mylist(1)+" class="+mylist.getClass)
     }
 }

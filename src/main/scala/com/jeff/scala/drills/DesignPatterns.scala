@@ -16,11 +16,17 @@ object DesignPatterns {
     }
 
     class ATaxStrategy extends TaxStrategy {
-        def taxIt(product: String): Double = 10.0
+        def taxIt(product: String): Double = {
+            logger.debug(product)
+            10.0
+        }
     }
 
     class BTaxStrategy extends TaxStrategy {
-        def taxIt(product: String): Double = 20.0
+        def taxIt(product: String): Double = {
+            logger.debug(product)
+            20.0
+        }
     }
 
     def taxIt: TaxStrategy => String => Double = s => p => s.taxIt(p)
@@ -31,12 +37,13 @@ object DesignPatterns {
 
 
     def main(args: Array[String]): Unit = {
-        logger.debug("tax a={}", taxIt_a("jeff"))
-        logger.debug("tax a={}", taxIt_b("jeff"))
+        logger.debug("tax a={}", taxIt_a("taxIt_a"))
+        logger.debug("tax a={}", taxIt_b("taxIt_b"))
 
 
         val taxIt_aa = taxIt(new ATaxStrategy)
-        logger.debug("tax a={}", taxIt_aa("jeff"))
+        logger.debug("tax a={}", taxIt_aa("taxIt_aa"))
+        logger.debug("tax a={}", taxIt_aa("taxIt_aaaa"))
 
         //no difference type for def and val, only def will evaluate every time, while val at the first time.
         logger.debug("tax a class={}", taxIt_a.getClass)

@@ -38,6 +38,8 @@ object ScalaDrills {
         covariantAndContravariant()
         higherOrderFunction()
 
+        funcCurried()
+
 
         //if define don't have (),then the invoke can't have ();
         // if define have (),then invoke may or not have (); better have means having side effect
@@ -465,6 +467,22 @@ object ScalaDrills {
         }
     }
 
+
+    def funcCurried()={
+        import scala.math._
+
+
+        def callLog(func: Double=>Double,num: Int)=func(num)
+
+        //turn method to function
+        val oneLog=callLog _
+
+        def twoLog=callLog _
+
+        logger.debug("curried value={}",oneLog.curried(log10 _)(1000))
+        logger.debug("curried value={}",twoLog.curried(log10 _) (10000))
+        logger.debug("curried value={}",(callLog _).curried(log10 _) (10000))
+    }
 
 }
 
