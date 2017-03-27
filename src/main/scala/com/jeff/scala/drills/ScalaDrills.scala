@@ -15,8 +15,13 @@ object ScalaDrills {
 
     def main(args: Array[String]): Unit = {
 
-        var count = Source.fromFile("/Users/twer/play.log").getLines().map(_ => 1).sum
+        var count = Source.fromFile("/Users/twer/ciam.txt").getLines().map(_ => 1).sum
         logger.debug("count={}}", count)
+
+        enum
+        typeAndPath
+        typeLowerBound
+        typeUpperBound
 
         paramDefine()
         dynamicTest()
@@ -47,6 +52,84 @@ object ScalaDrills {
         scalaTry
     }
 
+    def enum = {
+
+        object WeekDay extends Enumeration {
+            type WeekDay = Value
+            val Mon, Tue, Wed, Thu, Fri, Sat, Sun = Value
+        }
+        import WeekDay._
+        def isWorkingDay(d: WeekDay) = !(d == Sat || d == Sun)
+
+        WeekDay.values filter isWorkingDay foreach { str =>
+            logger.debug("{}", str)
+        }
+    }
+
+    def typeAndPath = {
+        object Test
+        trait TraitName
+
+        def foo(x: TraitName) = x
+
+        def bar(y: Test.type) = y
+
+        class Outer {
+
+            trait Inner
+
+            def y = new Inner {}
+
+            //this. can be omitted with same meaning  , as scala no static key words
+            //path-dependent
+            def ff(x: this.Inner) = "null"
+
+            //type project
+            def gg(y: Outer#Inner) = "null"
+        }
+        val x = new Outer
+        val y = new Outer
+
+        logger.debug("it is ok {}", x.ff(x.y))
+        //below not ok
+        //logger.debug("it is ok {}",x.ff(y.y))
+        //but
+        logger.debug("it is ok too: {}", x.gg(y.y))
+    }
+
+    def typeLowerBound = {
+        class A {
+            type B >: List[Int]
+
+            def foo(b: B) = b
+        }
+
+        val x = new A {
+            //compile time constraints
+            type B = Traversable[Int]
+        }
+        //both are ok, which are runtime type constraints
+        logger.debug("list type: {}", x.foo(List(1, 2)))
+        logger.debug("set type: {}", x.foo(Set(1, 3)))
+    }
+
+    def typeUpperBound = {
+        class A {
+            type B <: Traversable[Int]
+
+            def count(b: B) = b.foldLeft(0)(_ + _)
+        }
+
+        val x = new A {
+            type B = List[Int]
+        }
+        logger.debug("list count: {}", x.count(List(1, 2)))
+        val y = new A {
+            type B = Set[Int]
+        }
+        logger.debug("Set count: {}", y.count(Set(1, 2)))
+    }
+
     def paramDefine(): Unit = {
         /**
           *
@@ -59,6 +142,7 @@ object ScalaDrills {
                 loopTill(cond)(body)
             }
         }
+
         var i = 10
         loopTill(i > 0) {
             logger.debug("i={}", i)
@@ -115,6 +199,7 @@ object ScalaDrills {
 
 
         val breakException = new RuntimeException("test")
+
         def breakable(op: => Unit): Unit = {
             try {
                 op
@@ -122,6 +207,7 @@ object ScalaDrills {
                 case e: Exception => logger.error("catch {}", e)
             }
         }
+
         def break = throw breakException
 
         //closure should use {} or ({})
@@ -207,6 +293,7 @@ object ScalaDrills {
     }
 
     def importAndObject(): Unit = {
+
         import java.util._
 
         import scala.collection.convert.Wrappers._
@@ -241,8 +328,9 @@ object ScalaDrills {
                 name + " ; " + age
             }
         }
-        MyObject()
+        val myObject = MyObject() //this invoke is apply(), MyObject is singleton, pay attention to the difference with new DB
         logger.debug(MyObject("donna"))
+        logger.debug(MyObject.name)
     }
 
     def caseClass(): Unit = {
@@ -291,8 +379,6 @@ object ScalaDrills {
         if (Skip(10, NoOption) == Skip(10, NoOption).copy()) {
             logger.debug("In Scala, invoking the == method is the same as calling the equals method")
         }
-
-
 
         applyOptions(new DBCursor, richQuery.option)
     }
@@ -370,6 +456,7 @@ object ScalaDrills {
         }
 
         implicit def int2RangeMaker(left: Int): RangeMaker = new RangeMaker(left)
+
         val oneTo10 = 1 --> 10
 
         logger.debug(oneTo10.toString)
@@ -425,7 +512,7 @@ object ScalaDrills {
 
         def position2[A](xs: List[A], value: A): Maybe[Int] = {
             val index = xs.indexOf(value)
-            //Maybe[int] can be assigned to Maybe[Nothing] as Maybe is covariant.
+            //Maybe[Nothing] can be assigned to Maybe[Int] as Maybe is covariant.
             if (index != -1) Just(index) else Nill
         }
 
@@ -445,8 +532,10 @@ object ScalaDrills {
 
         def addTen(num: Int) = {
             def ++(x: Int) = x + 10
+
             ++(num)
         }
+
         //using call by name
         logger.debug(forVal.map(addTen).toString())
     }
@@ -468,20 +557,20 @@ object ScalaDrills {
     }
 
 
-    def funcCurried()={
+    def funcCurried() = {
         import scala.math._
 
 
-        def callLog(func: Double=>Double,num: Int)=func(num)
+        def callLog(func: Double => Double, num: Int) = func(num)
 
         //turn method to function
-        val oneLog=callLog _
+        val oneLog = callLog _
 
-        def twoLog=callLog _
+        def twoLog = callLog _
 
-        logger.debug("curried value={}",oneLog.curried(log10 _)(1000))
-        logger.debug("curried value={}",twoLog.curried(log10 _) (10000))
-        logger.debug("curried value={}",(callLog _).curried(log10 _) (10000))
+        logger.debug("curried value={}", oneLog.curried(log10 _)(1000))
+        logger.debug("curried value={}", twoLog.curried(log10 _)(10000))
+        logger.debug("curried value={}", (callLog _).curried(log10 _)(10000))
     }
 
 }

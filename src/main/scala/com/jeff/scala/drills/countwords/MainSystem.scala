@@ -27,6 +27,9 @@ object MainSystem {
             case "start" =>
                 val urls = List("http://www.infoq.com/",
                     "http://www.qq.com/",
+                    "http://www.sina.com/",
+                    "http://www.baidu.com/",
+                    "http://www.ifeng.com/",
                     "http://www.sohu.com/")
                 accumulator ! StartCounting(urls, 2)
                 log.debug("MainActor send urls done.", new Throwable("MainActor"))

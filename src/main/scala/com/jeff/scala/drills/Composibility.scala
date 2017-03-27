@@ -9,12 +9,12 @@ object Composibility {
 
     def not: Boolean => Boolean = !_
 
-    def filter[A](criteria: A => Boolean)(col: Traversable[A]) = col.filter(criteria)
+    def filter[A](criteria: A => Boolean)(col: Traversable[A]): Traversable[A] = col.filter(criteria)
 
     def map[A, B](f: A => B)(col: Traversable[A]) = col.map(f)
 
     //convert to partial function
-    def evenFilter = filter(even) _
+    def evenFilter: (Traversable[Int]) => Traversable[Int] = filter(even) _
 
     def double: Int => Int = _ * 2
 
