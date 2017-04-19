@@ -4,6 +4,12 @@ import java.io.{File, FileInputStream, InputStream}
 
 /**
   * Defines an interface for things that are like files for our synchronization code.
+  *
+  * The type class idiom, as it exists in Scala, takes this form:
+  * (1) a type class trait that acts as the accessor or utility library for a given type;
+  * (2) an object with the same name as the trait (this object contains all default implementations of
+  * the type class trait for various types); and
+  * (3) methods with context bounds where the type trait need to be used
   */
 trait FileLike[T] {
     def name(file: T): String
