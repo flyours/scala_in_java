@@ -18,9 +18,15 @@ object Manifest extends App{
     println( new MakeFoo[String].make)
     println( new MakeFoo[Date].make)
 
-    //ClassManifest has been deprecated by ClassTag
+    //ClassManifest has been deprecated by ClassTag; Array() need compile aware type, otherwise need ClassTag
     def first[A : ClassTag](x : Array[A]) = Array(x.head)
+
+    def listFirst[A](l:List[A]): A = l.head
+
+//    def arrayFirst[A](l:Array[A]): A = Array(l.head)
 
     val first1 = first(Array(1, 2))
     println(first1.toList)
+
+    println(listFirst(List(1,2,3)))
 }
