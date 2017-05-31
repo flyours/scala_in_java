@@ -3,8 +3,8 @@ package com.jeff.scala.drills
 import com.jeff.scala.drills.JsonUtils._
 import org.json4s.JsonAST.{JNull, JString}
 import org.json4s.{CustomSerializer, DefaultFormats}
-import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.{FunSuite, Matchers}
 
 import scala.util.{Failure, Success, Try}
 
@@ -42,7 +42,22 @@ class JsonUtilsTest extends FunSuite with ScalaFutures with Matchers{
 
     println(t)
     println(tt)
-    assert(tt.equals(t))
+    assert(t!=tt)
+  }
+
+  test("json converter") {
+
+    import org.json4s.Extraction._
+
+    val t = MyTest(Some("jeff"), Try("ok"))
+
+    val jt=decompose(t)
+
+    val tString=(jt \ "t").extract[String]
+    println(tString)
+
+    val oString=(jt \ "o").extractOrElse[String]("option")
+    println(oString)
   }
 
 }
