@@ -91,7 +91,7 @@ class JsonUtilsTest extends FunSuite with ScalaFutures with Matchers {
     println(pretty(render(json)))
     println(compact(render(json)))
 
-    // render(json) can be used to paring tuple to JValue
+    // render(json) can be used to paring single tuple to JValue
     val jValue = render(json)
     assert(jValue.isInstanceOf[JObject])
 
