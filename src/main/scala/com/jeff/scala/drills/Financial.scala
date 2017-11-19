@@ -3,10 +3,9 @@ package com.jeff.scala.drills
 
 object Financial {
     def main(args: Array[String]) {
-        val results = for (line <- args; oneNum = java.lang.Float.parseFloat(line)) yield oneNum
-        val sum = results.sum
+        val sum=args.map(_.toFloat).sum
         println(args.mkString("+"))
-        println("total Number: " + results.length)
+        println("total Number: " + args.length)
         println("         sum: " + sum)
     }
 }
