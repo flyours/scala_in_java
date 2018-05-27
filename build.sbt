@@ -18,7 +18,7 @@ libraryDependencies ++= Seq(
     "com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml" % "2.8.2",
     "org.json4s" %% "json4s-jackson" % "3.3.0",
     "org.json4s" %% "json4s-ext" % "3.3.0",
-    //don't use %% for libs writed using java; only libs using scala need use %%
+    //don't use %% for libs written using java; only libs using scala need use %%
     "org.hibernate" % "hibernate-core" % "4.3.11.Final",
 
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",

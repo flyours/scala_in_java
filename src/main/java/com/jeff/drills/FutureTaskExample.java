@@ -31,6 +31,7 @@ public class FutureTaskExample {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         executor.execute(futureTask1);
         executor.execute(futureTask2);
+        executor.execute(new FutureTask<>(() -> Thread.currentThread().getName()));
 
         while (true) {
             try {
