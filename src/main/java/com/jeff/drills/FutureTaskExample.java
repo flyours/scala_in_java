@@ -25,8 +25,8 @@ public class FutureTaskExample {
         MyCallable callable1 = new MyCallable(5000);
         MyCallable callable2 = new MyCallable(10000);
 
-        FutureTask<String> futureTask1 = new FutureTask<String>(callable1);
-        FutureTask<String> futureTask2 = new FutureTask<String>(callable2);
+        FutureTask<String> futureTask1 = new FutureTask<>(callable1);
+        FutureTask<String> futureTask2 = new FutureTask<>(callable2);
 
         ExecutorService executor = Executors.newFixedThreadPool(2);
         executor.execute(futureTask1);
