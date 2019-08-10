@@ -10,6 +10,7 @@ val akkaVersion = "2.4.14"
 
 libraryDependencies ++= Seq(
     "joda-time" % "joda-time" % "2.9.2",
+    "com.alibaba" % "fastjson" % "1.2.29",
     "ch.qos.logback" % "logback-classic" % "1.1.6",
     "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.4",
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
